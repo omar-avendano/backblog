@@ -1,0 +1,49 @@
+CREATE DATABASE IF NOT EXISTS api_rest_laravel;
+USE api_rest_laravel;
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` INT(255) AUTO_INCREMENT NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `last_name` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `role` VARCHAR(20) NULL,
+  `image` VARCHAR(255) NULL,
+  `description` TEXT NULL,
+  `created_at` DATETIME DEFAULT NULL,
+  `updated_at` DATETIME DEFAULT NULL,
+  `remember_token` VARCHAR(255) NULL,
+  CONSTRAINT PK_USERS PRIMARY KEY (id))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` INT(255) AUTO_INCREMENT NOT NULL,
+  `name` VARCHAR(100) NULL,
+  `created_at` DATETIME DEFAULT NULL,
+  `updated_at` DATETIME DEFAULT NULL,
+  CONSTRAINT PK_CATEGORIES PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `posts` (
+  `id` INT(255) NOT NULL AUTO_INCREMENT,
+  `user_id` INT(255) NOT NULL,
+  `category_id` INT(255) NOT NULL,
+  `title` VARCHAR(255) NOT NULL,
+  `content` TEXT NOT NULL,
+  `image` VARCHAR(255) NULL,
+  `created_at` DATETIME DEFAULT NULL COMMENT '	',
+  `updated_at` DATETIME DEFAULT NULL,
+  CONSTRAINT PK_POST PRIMARY KEY (`id`),
+  INDEX `IDX_POST_USER` (`user_id` ASC),
+  INDEX `IDX_POST_CATEGORY` (`category_id` ASC),
+  CONSTRAINT `FK_POST_USER`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_POST_CATEGORIES`
+    FOREIGN KEY (`category_id`)
+    REFERENCES `categories` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
